@@ -1,12 +1,10 @@
-This tells you how to set up your very own back-end server for remix.js!
+This document tells you how to set up your very own back-end server for remix.js.
 
-This involves being able to run your own Python server, your own Amazon S3 bucket, 
-and making a few tweaks to remix.js and sandbox.html.  This is not an impossible task, but it's not trivial.  
-If you want to do easy uploading, you can work with sandbox.html and use the Echo Nest's servers...
-but those servers are cleared every week. If you want to make your own back-end server, read on...
+This involves being able to run your own Python server, your own Amazon S3 bucket, and making a few tweaks to remix.js and sandbox.html.  This is not an impossible task, but it's not trivial.  If you want to do easy uploading, you can work with [sandbox.html](http://echonest.github.io/remix/js/examples/sandbox) and use the Echo Nest's servers...but the audio files on those servers are cleared every week. If you want to make your own back-end server, read on.
 
 
 How sandbox.html works:
+----------------------
 
 First, we need to know how sandbox.html uploads audio.  Uploading takes place in three parts:  picking a track and doing the upload, giving the user feedback on the upload and analysis process, and then loading & remixing the uploaded track.  
 
@@ -16,17 +14,19 @@ Giving the user feedback:  This code runs if there's a parameter called 'key' in
 
 Remixing:  This code runs if there's a parameter call 'trid' in the query string.  The getProfile function queries the back-end server to find the audio URL for the track ID, and then starts the remixing process.  
 
-
 How the server works:
+----------------------
 The Python server is responsible for sending the audio to the analysis server, and then matching Echo Nest analysis data to the URLs of the uploaded audio.  
 It also keeps track of the estimated analysis time, and provides the Amazon Policy document that allows uploading audio to Amazon S3.
 Thus, it has to have access to your Amazon S3 key and secret.
 
-How Amazon S3 work:
+How Amazon S3 works:
+----------------------
 S3 stores the uploaded audio, which is then referenced by the Python server.  
 
 
 How things connect:
+----------------------
 
 Picking a track: 
 The fetchSignature function in remix.js asks the Python server for an Amazon S3 Policy document that will allow audio to be uploaded to S3.
@@ -47,15 +47,5 @@ On the server side, you don't need to change anything.
 Remixing:  The getProfile function in remix.js asks the Python server for where the audio file for a given Track ID is.  
 You will need to replace the server URL with your own server. 
 On the server side, you don't need to change anything.
-
-
-How the rest of the server works:  
-
-Short version:  There's a queue of tracks to be analyzed:  your track is added to the queue.
-Once it is processed, the track URL is stored in a key-value database, with the track ID as the key. 
-
-Long version:  for function-by-function comment, please see this writeup
-
-
 
 
