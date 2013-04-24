@@ -20,7 +20,8 @@ Remixing:  This code runs if there's a parameter call 'trid' in the query string
 How the server works:
 ----------------------
 The Python server is responsible for sending the audio to the analysis server, and then matching Echo Nest analysis data to the URLs of the uploaded audio.  
-It also keeps track of the estimated analysis time, and provides the Amazon Policy document that allows uploading audio to S3.  You'll need to get your own Amazon S3 key and secret into server.py:  We recommend loading them through imp.  You'll also need an Echo Nest API Key, which you can get [here](https://developer.echonest.com/account/register).  
+It also keeps track of the estimated analysis time, and provides the Amazon Policy document that allows uploading audio to S3.  You'll need to get your own Amazon S3 key and secret into server.py:  We recommend loading them through imp.  You'll also need an Echo Nest API Key, which you can get [here](https://developer.echonest.com/account/register).
+The server runs using [CherryPy](http://www.cherrypy.org/), and also requires [requests](http://docs.python-requests.org/en/latest/) and [boto](http://boto.readthedocs.org/en/latest/).
 
 
 How things connect:
@@ -41,5 +42,16 @@ Remixing:  The _getProfile_ function in remix.js asks the Python server for wher
 You will need to replace the server URL with your own server. 
 On the server side, you don't need to change anything.
 
-Once you've made these changes, things should work: feel free to drop us a line if they do not.  Happy remixing!
+Once you've made these changes, things should work.  If you're on Amazon, you may have to start the server with sudo.  
+Feel free to drop us a line if you have problems or questions, and happy remixing!
+
+
+Extra - How the database works:
+----------------------
+The database is a simple text file (files.db) that stores one track per line.
+It stores the track ID, artist, title, tag, and URL.  When the file is loaded by db.py, this data is loaded into 
+a python dictionary, with the track IDs as the key.  This means that you can get an audio URL back for a track ID.
+This database is obviously lightweight, and may not scale well if the number of tracks gets _very, very_ high.
+However, for most use cases, it should be fine.
+
 
